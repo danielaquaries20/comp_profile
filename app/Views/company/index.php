@@ -229,6 +229,8 @@
 
 <?= $this->endSection() ?>
 
+
+<!-- =================== SCRIPT SECTION =================== -->
 <?= $this->section('js') ?>
 <script>
     console.log('JavaScript loaded');
@@ -306,6 +308,7 @@
             }, 300);
         }
     } // Form validation
+    // === Validasi Form Secara Manual (tanpa browser default) ===
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM loaded, setting up form validation');
 
@@ -457,7 +460,7 @@
         return emailRegex.test(email);
     }
 
-    // Initialize Mapbox map
+     // === Mapbox: Inisialisasi Peta Lokasi Perusahaan ===
     mapboxgl.accessToken = '<?= $mapbox_token ?>';
 
     const map = new mapboxgl.Map({

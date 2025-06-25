@@ -6,26 +6,42 @@ use CodeIgniter\Model;
 
 class ServiceModel extends Model
 {
+    // Nama tabel di database
     protected $table = 'services';
+
+    // Primary key tabel
     protected $primaryKey = 'id';
+
+    // Auto increment ID
     protected $useAutoIncrement = true;
+
+    // Format return: array
     protected $returnType = 'array';
+
+    // Tidak pakai soft delete
     protected $useSoftDeletes = false;
+
+    // Proteksi field agar hanya bisa input/update field di bawah
     protected $protectFields = true;
+
+    // Field yang diizinkan untuk insert/update
     protected $allowedFields = [
-        'title',
-        'description',
-        'icon',
-        'sort_order',
-        'is_active',
+        'title',                // Judul layanan
+        'description',          // Deskripsi layanan
+        'icon',                 // Icon layanan (font-awesome atau emoji)
+        'sort_order',           // Urutan tampilan
+        'is_active',            // Status aktif atau tidak
         'created_at',
         'updated_at'
     ];
 
+    // Konfigurasi timestamp otomatis
     protected $useTimestamps = true;
     protected $dateFormat = 'datetime';
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
+
+    // Aturan validasi untuk form input layanan
     protected $validationRules = [
         'title' => 'required|max_length[100]',
         'description' => 'required|max_length[500]',
@@ -33,6 +49,8 @@ class ServiceModel extends Model
         'sort_order' => 'integer'
     ];
 
+
+    // Pesan error kustom untuk validasi
     protected $validationMessages = [
         'title' => [
             'required' => 'Judul service harus diisi.',
@@ -49,7 +67,8 @@ class ServiceModel extends Model
     ];
 
     /**
-     * Get active services ordered by sort_order
+     * ✅ Ambil semua layanan yang aktif (is_active = 1)
+     *    dan urutkan berdasarkan sort_order
      */
     public function getActiveServices()
     {
@@ -58,8 +77,9 @@ class ServiceModel extends Model
             ->findAll();
     }
 
-    /**
-     * Initialize default services
+   /**
+     * ✅ Inisialisasi data default ke dalam tabel services
+     *    jika belum ada datanya (biasanya dipakai saat seeding)
      */
     public function initializeDefaults()
     {
@@ -94,6 +114,7 @@ class ServiceModel extends Model
             ]
         ];
 
+        // Cek apakah data default sudah ada di database
         foreach ($defaults as $service) {
             $existing = $this->where('title', $service['title'])->first();
             if (!$existing) {

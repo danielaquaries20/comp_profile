@@ -6,22 +6,31 @@ use CodeIgniter\Model;
 
 class PartnerModel extends Model
 {
+
+    // Nama tabel di database
     protected $table = 'partners';
+
+    // Primary key
     protected $primaryKey = 'id';
+
+    // Field Table yang boleh diinput/update
     protected $allowedFields = [
-        'name',
-        'logo',
-        'website_url',
-        'description',
-        'is_active',
-        'sort_order'
+        'name',             // Nama partner/mitra
+        'logo',             // Nama file logo gambar
+        'website_url',      // URL website partner (opsional)
+        'description',      // Deskripsi singkat
+        'is_active',        // Status aktif/tidak
+        'sort_order'        // Urutan tampilan
     ];
+
+    // Aktifkan pencatatan waktu otomatis
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
 
     /**
-     * Get all active partners ordered by sort_order
+     * ✅ Ambil semua partner yang aktif (is_active = 1)
+     *    Diurutkan berdasarkan `sort_order` lalu `name`
      */
     public function getActivePartners()
     {
@@ -32,7 +41,8 @@ class PartnerModel extends Model
     }
 
     /**
-     * Get all partners for admin (active and inactive)
+     * ✅ Ambil semua data partner (baik aktif maupun tidak)
+     *    Digunakan untuk halaman admin (management partner)
      */
     public function getAllPartners()
     {
@@ -42,7 +52,8 @@ class PartnerModel extends Model
     }
 
     /**
-     * Get next sort order
+     * ✅ Ambil urutan (sort_order) selanjutnya secara otomatis
+     *    Biasanya dipakai saat menambahkan partner baru
      */
     public function getNextSortOrder()
     {
@@ -51,7 +62,8 @@ class PartnerModel extends Model
     }
 
     /**
-     * Toggle partner status
+     * ✅ Fungsi untuk toggle status aktif/tidak
+     *    Dipanggil ketika admin menekan tombol Aktif/Nonaktif partner
      */
     public function toggleStatus($id)
     {

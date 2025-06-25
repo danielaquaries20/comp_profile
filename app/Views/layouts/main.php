@@ -7,14 +7,14 @@
     <title><?= isset($title) ? esc($title) : 'PT. Samsudi Indoniaga Sedaya' ?></title>
     <meta name="description" content="<?= isset($meta_description) ? esc($meta_description) : 'Solusi niaga terpercaya untuk kemajuan bisnis Anda di Indonesia' ?>">
 
-    <!-- External CSS -->
+    <!-- Include Mapbox CSS untuk peta -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/main.css') ?>">
 
-    <!-- Additional CSS if needed -->
+    <!-- Slot tambahan untuk halaman yang membutuhkan CSS khusus -->
     <?= $this->renderSection('css') ?>
 </head>
 

@@ -2,11 +2,16 @@
 
 namespace App\Controllers;
 
-class CompanyProfile extends BaseController {
-     protected $companySettingsModel;
+class CompanyProfile extends BaseController
+{
+
+    //Properti yang menyimpan instance model-model untuk digunakan di controller ini.
+    protected $companySettingsModel;
     protected $serviceModel;
     protected $partnerModel;
 
+
+    //Model di-load sekali saat controller diinisialisasi, agar bisa digunakan di semua fungsi.
     public function __construct()
     {
         $this->companySettingsModel = new \App\Models\CompanySettingsModel();
@@ -14,8 +19,13 @@ class CompanyProfile extends BaseController {
         $this->partnerModel = new \App\Models\PartnerModel();
     }
 
+    // Fungsi utama beranda ini:
+    // - Ambil semua setting dari database
+    // - Ambil data layanan aktif (services)
+    // - Ambil partner aktif (partners)
+    // - Siapkan array $data untuk dikirim ke view company/index
     public function index()
-    {        // Get all company settings from database
+    {        // Mengambil data dari 3 model
         $settings = $this->companySettingsModel->getAllSettings();
         $services = $this->serviceModel->getActiveServices();
         $partners = $this->partnerModel->getActivePartners();
@@ -43,6 +53,8 @@ class CompanyProfile extends BaseController {
         return view('company/index', $data);
     }
 
+
+    //Data statis sederhana untuk halaman "Tentang Kami". Bisa dikembangkan untuk ambil setting dinamis juga.
     public function about()
     {
         $data = [
@@ -53,16 +65,18 @@ class CompanyProfile extends BaseController {
         return view('company/about', $data);
     }
 
+    //Menampilkan semua data layanan dari model.
     public function services()
     {
         $data = [
             'title' => 'Layanan Kami - PT. Samsudi Indoniaga Sedaya',
-            'services' => $this->getServices()
+            'services' => $this->serviceModel->getActiveServices()
         ];
 
         return view('company/services', $data);
     }
 
+    //Menyiapkan data untuk halaman kontak, khususnya info alamat, email, jam operasional, dan lokasi map.
     public function contact()
     {
         $data = [
@@ -72,6 +86,8 @@ class CompanyProfile extends BaseController {
 
         return view('company/contact', $data);
     }
+
+    //Menyimpan Pesan dari Form Kontak
     public function submitContact()
     {
         $contactModel = new \App\Models\ContactModel();
@@ -110,6 +126,7 @@ class CompanyProfile extends BaseController {
         }
     }
 
+    //Fungsi pembantu untuk membentuk struktur data kontak dan lokasi:
     private function getContactInfo($settings = [])
     {
         return [

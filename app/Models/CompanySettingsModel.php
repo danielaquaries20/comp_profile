@@ -5,12 +5,16 @@ namespace App\Models;
 use CodeIgniter\Model;
 
 class CompanySettingsModel extends Model {
-       protected $table = 'company_settings';
+
+    // Konfigurasi dasar model. Table: company_settings, tanpa soft delete, auto increment, return berupa array.
+    protected $table = 'company_settings';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
+
+    //Hanya field yang diizinkan (allowedFields) yang bisa diisi atau di-update oleh query save(), insert(), atau update().
     protected $allowedFields = [
         'setting_key',
         'setting_value',
@@ -20,15 +24,23 @@ class CompanySettingsModel extends Model {
         'updated_at'
     ];
 
+    //Otomatis mengisi timestamp saat create/update (created_at dan updated_at).
     protected $useTimestamps = true;
     protected $dateFormat = 'datetime';
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
+
+    // Validasi:
+    // setting_key wajib dan max 100 karakter
+    // setting_value boleh kosong
+    // setting_type hanya boleh salah satu dari yang ditentukan
     protected $validationRules = [
         'setting_key' => 'required|max_length[100]',
         'setting_value' => 'permit_empty',
         'setting_type' => 'required|in_list[text,textarea,email,phone,json,image]'
     ];
+
+    //Pesan khusus yang akan ditampilkan jika validasi gagal.
     protected $validationMessages = [
         'setting_key' => [
             'required' => 'Setting key harus diisi.',
@@ -40,18 +52,17 @@ class CompanySettingsModel extends Model {
         ]
     ];
 
-    /**
-     * Get setting by key
-     */
+    // Mengambil nilai setting berdasarkan kunci setting_key.
+    // Sangat berguna untuk site_config('company_name') di view.
     public function getSetting($key)
     {
         $setting = $this->where('setting_key', $key)->first();
         return $setting ? $setting['setting_value'] : null;
     }
 
-    /**
-     * Update or create setting
-     */
+    // Jika setting sudah ada → di-update.
+    // Jika belum ada → insert baru.
+    // Cocok dipanggil dari seeder atau halaman setting admin.
     public function updateSetting($key, $value, $type = 'text', $description = '')
     {
         $existing = $this->where('setting_key', $key)->first();
@@ -70,9 +81,9 @@ class CompanySettingsModel extends Model {
         }
     }
 
-    /**
-     * Get all settings grouped by type
-     */
+    // Mengambil semua pengaturan dalam bentuk array terstruktur:
+    // ['company_name' => ['value' => ..., 'type' => ..., 'desc' => ...]]
+    // Memudahkan pemanggilan di admin panel.
     public function getAllSettings()
     {
         $settings = $this->findAll();
@@ -89,9 +100,8 @@ class CompanySettingsModel extends Model {
         return $grouped;
     }
 
-    /**
-     * Initialize default settings
-     */
+    // Fungsi ini digunakan untuk mengisi setting awal secara otomatis.
+    // Cukup panggil sekali (misalnya dari controller saat install/setup aplikasi pertama).
     public function initializeDefaults()
     {
         $defaults = [

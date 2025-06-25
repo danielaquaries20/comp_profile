@@ -6,29 +6,43 @@ use CodeIgniter\Model;
 
 class ContactModel extends Model
 {
+
+    // Nama tabel di database
     protected $table = 'contacts';
+
+    // Primary key
     protected $primaryKey = 'id';
+
+    // Auto increment
     protected $useAutoIncrement = true;
+
+    // Format data kembalian (array, bisa juga object)
     protected $returnType = 'array';
+
+    // Tidak menggunakan soft delete (bisa diaktifkan jika perlu)
     protected $useSoftDeletes = false;
+
+    // Lindungi field agar hanya allowedFields yang bisa diisi
     protected $protectFields = true;
+
+    // Field Contact yang boleh disimpan/update ke DB
     protected $allowedFields = [
-        'nama',
-        'email',
-        'pesan',
-        'status',
-        'created_at',
+        'nama',             // Nama pengirim
+        'email',            // Email pengirim
+        'pesan',            // Isi pesan
+        'status',           // Status (unread/read/replied)
+        'created_at',       
         'updated_at',
-        'investasi_idr'
+        'investasi_idr'     // Nilai rencana investasi
     ];
 
-    // Dates
+    // Konfigurasi timestamp otomatis
     protected $useTimestamps = true;
     protected $dateFormat = 'datetime';
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
 
-    // Validation
+    // Aturan validasi input pengguna
     protected $validationRules = [
         'nama' => 'required|min_length[3]|max_length[100]',
         'email' => 'required|valid_email|max_length[100]',
@@ -36,6 +50,7 @@ class ContactModel extends Model
         'investasi_idr' => 'required|numeric|max_length[9]'
     ];
 
+    // Pesan validasi yang ditampilkan jika input tidak sesuai
     protected $validationMessages = [
         'nama' => [
             'required' => 'Nama harus diisi.',
@@ -59,10 +74,11 @@ class ContactModel extends Model
         ]
     ];
 
+    // Atur validasi agar tidak dilewati
     protected $skipValidation = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
+    // Callback (kosong untuk sekarang, bisa ditambahkan custom logic)
     protected $allowCallbacks = true;
     protected $beforeInsert = [];
     protected $afterInsert = [];
@@ -74,7 +90,7 @@ class ContactModel extends Model
     protected $afterDelete = [];
 
     /**
-     * Get all contacts with pagination
+     * ✅ Ambil semua pesan kontak dengan limitasi (untuk pagination admin)
      */
     public function getContacts($limit = 10, $offset = 0)
     {
@@ -83,7 +99,7 @@ class ContactModel extends Model
     }
 
     /**
-     * Get contact by ID
+     * ✅ Ambil pesan berdasarkan ID tertentu (misalnya untuk detail pesan)
      */
     public function getContact($id)
     {
@@ -91,7 +107,7 @@ class ContactModel extends Model
     }
 
     /**
-     * Save contact message
+     * ✅ Simpan pesan baru ke database
      */
     public function saveContact($data)
     {
@@ -99,7 +115,7 @@ class ContactModel extends Model
     }
 
     /**
-     * Update contact status
+     * ✅ Update status pesan (misal: tandai sudah dibaca)
      */
     public function updateStatus($id, $status)
     {
@@ -107,7 +123,8 @@ class ContactModel extends Model
     }
 
     /**
-     * Get unread contacts count
+     * ✅ Hitung jumlah pesan yang belum dibaca
+     *    Digunakan untuk notifikasi admin
      */
     public function getUnreadCount()
     {
@@ -115,7 +132,8 @@ class ContactModel extends Model
     }
 
     /**
-     * Tandai semua pesan sebagai sudah dibaca
+     * ✅ Tandai semua pesan sebagai sudah dibaca
+     *    Biasanya saat admin klik "Tandai semua dibaca"
      */
     public function markAllAsRead()
     {
@@ -124,6 +142,10 @@ class ContactModel extends Model
             ->update();
     }
 
+    /**
+     * ✅ Hapus semua pesan yang status-nya sudah dibaca
+     *    Untuk fitur "Bulk delete" pada kontak admin
+     */
     public function deleteAllRead()
     {
         return $this->where('status', 'read')
