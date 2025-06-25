@@ -41,3 +41,28 @@ company-profile/
 ├── writable/                      # Cache, logs, session
 └── vendor/                        # Composer dependencies
 ```
+
+## 🚀 Fitur Utama
+
+### Frontend (Website Publik)
+
+- **Responsive Design**: Website yang mobile-friendly dan SEO optimized
+- **Dynamic Content**: Semua konten diambil dari database
+- **Hero Section**: Background image dan tagline yang dapat diubah dari admin
+- **About Section**: Informasi perusahaan dengan gambar yang dapat diupload
+- **Services**: Layanan perusahaan dengan icon Font Awesome yang dapat dipilih
+- **Partners**: Logo dan informasi partner/mitra dengan upload gambar
+- **Contact Form**: Form kontak dengan notifikasi dan tersimpan ke database
+- **Professional Icons**: Menggunakan Font Awesome 6.4.0
+
+### Backend (Admin Panel)
+
+- **Dashboard**: Statistik pesan dan overview data
+- **Contact Management**: Kelola pesan masuk dari website dengan bulk actions
+- **Company Settings**: Atur informasi perusahaan, upload logo, background
+- **Services Management**: CRUD layanan dengan icon picker interaktif
+- **Partners Management**: CRUD partner dengan upload logo
+- **Image Upload**: Upload dan hapus gambar dengan preview dan validasi
+- **User Management**: Login/logout admin dengan session
+- **Password Management**: Ganti password admin
+- **Data Initialization**: Setup data awal otomatis

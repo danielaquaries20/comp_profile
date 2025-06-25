@@ -129,3 +129,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const display = document.getElementById('investasi_display');
+    const hidden = document.getElementById('investasi_idr');
+
+    if (display && hidden) {
+        display.addEventListener('input', function () {
+            // Ambil angka saja
+            let value = this.value.replace(/[^0-9]/g, '');
+
+            // Jangan format kalau kosong
+            if (value === '') {
+                hidden.value = '';
+                this.value = '';
+                return;
+            }
+
+            // Format ke format Rupiah sederhana (manual)
+            const formatted = formatRupiah(value);
+            this.value = formatted;
+
+            // Simpan ke hidden input (angka mentah)
+            hidden.value = value;
+        });
+    }
+
+    function formatRupiah(angka) {
+        let reverse = angka.toString().split('').reverse().join('');
+        let ribuan = reverse.match(/\d{1,3}/g);
+        return 'Rp ' + ribuan.join('.').split('').reverse().join('');
+    }
+});

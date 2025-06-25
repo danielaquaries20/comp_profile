@@ -193,6 +193,14 @@
                         <label for="pesan">Pesan</label>
                         <textarea id="pesan" name="pesan" rows="5"><?= old('pesan') ?></textarea>
                     </div>
+                    <!--  Tambahan: Form Investasi IDR -->
+                    <div class="form-group">
+                        <label for="investasi_display">Rencana Investasi (dalam Rp)</label>
+                        <input type="text" id="investasi_display" placeholder="Contoh: Rp 1.000.000,00">
+                        <input type="hidden" name="investasi_idr" id="investasi_idr">
+                    </div>
+
+                    <!-- Akhir tambahan -->
                     <button type="button" class="submit-btn" id="submitBtn">Kirim Pesan</button>
                 </form>
             </div>

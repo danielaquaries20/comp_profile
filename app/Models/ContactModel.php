@@ -18,7 +18,8 @@ class ContactModel extends Model
         'pesan',
         'status',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'investasi_idr'
     ];
 
     // Dates
@@ -31,7 +32,8 @@ class ContactModel extends Model
     protected $validationRules = [
         'nama' => 'required|min_length[3]|max_length[100]',
         'email' => 'required|valid_email|max_length[100]',
-        'pesan' => 'required|min_length[10]|max_length[1000]'
+        'pesan' => 'required|min_length[10]|max_length[1000]',
+        'investasi_idr' => 'required|numeric|max_length[9]'
     ];
 
     protected $validationMessages = [
@@ -49,6 +51,11 @@ class ContactModel extends Model
             'required' => 'Pesan harus diisi.',
             'min_length' => 'Pesan minimal 10 karakter.',
             'max_length' => 'Pesan maksimal 1000 karakter.'
+        ],
+        'investasi_idr' => [
+            'required' => 'Investasi uang harus diisi.',
+            'numeric' => 'Investasi uang harus berupa angka.',
+            'max_length' => 'Investasi paling banyak hanya Rp 999.999.999 tidak boleh lebih'
         ]
     ];
 
