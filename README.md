@@ -66,3 +66,83 @@ company-profile/
 - **User Management**: Login/logout admin dengan session
 - **Password Management**: Ganti password admin
 - **Data Initialization**: Setup data awal otomatis
+
+## 🛠️ Instalasi & Setup
+
+### 1. Download Project
+
+```bash
+# Clone atau download project ini
+git clone [repository-url]
+cd company-profile
+
+# Atau extract dari ZIP file
+```
+
+### 2. Install Dependencies
+
+```bash
+composer install
+```
+
+### 3. Environment Setup
+
+```bash
+# Copy environment file
+cp env .env
+
+# Edit .env file dan sesuaikan konfigurasi database
+```
+
+**Edit file `.env`:**
+
+```env
+# Database Configuration
+database.default.hostname = localhost
+database.default.database = company_profile_db
+database.default.username = root
+database.default.password = your_password
+database.default.DBDriver = MySQLi
+
+# App Configuration
+app.baseURL = 'http://localhost:8080/'
+app.indexPage = ''
+
+# Environment
+CI_ENVIRONMENT = development
+```
+
+### 4. Database Setup
+
+```bash
+# Buat database (via MySQL client atau phpMyAdmin)
+CREATE DATABASE company_profile_db;
+
+# Jalankan migrations
+php spark migrate
+
+# Seed data awal dan admin user
+php spark db:seed AdminSeeder
+```
+
+### 5. Set Permissions
+
+```bash
+# Linux/Mac
+chmod -R 755 writable/
+chmod -R 755 public/assets/images/uploads/
+
+# Windows (via PowerShell as Administrator)
+icacls writable /grant Users:F /T
+icacls public\assets\images\uploads /grant Users:F /T
+```
+
+### 6. Jalankan Server
+
+```bash
+# Development server
+php spark serve
+
+# Akses website: http://localhost:8080
+# Akses admin: http://localhost:8080/admin/login
+```
