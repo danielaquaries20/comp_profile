@@ -9,13 +9,17 @@ class CompanyApi extends ResourceController
 {
     protected $companySettingsModel;
     protected $serviceModel;
-    protected $format = 'json';
+    protected $format = 'json'; // Format default response adalah JSON
     public function __construct()
     {
+        // Inisialisasi model yang digunakan
         $this->companySettingsModel = new \App\Models\CompanySettingsModel();
         $this->serviceModel = new \App\Models\ServiceModel();
     }
 
+    /**
+     * Fungsi otentikasi API untuk mengamankan endpoint
+     */
     protected function checkAuth()
     {
         // Check if user is logged in for protected routes
@@ -25,14 +29,17 @@ class CompanyApi extends ResourceController
         return true;
     }
 
+    /**
+     * Cek apakah request valid, baik melalui session login atau API key (opsional)
+     */
     private function isValidApiRequest()
     {
-        // Check session for admin login
+        // Check session untuk admin login
         if (session()->get('admin_logged_in')) {
             return true;
         }
 
-        // Check for API key in header (optional for future use)
+        // Cek header untuk API Key jika dibutuhkan
         $apiKey = $this->request->getHeaderLine('X-API-Key');
         if ($apiKey && $apiKey === env('API_KEY')) {
             return true;
@@ -40,13 +47,15 @@ class CompanyApi extends ResourceController
 
         return false;
     }
+
     /**
-     * Get all company settings
+     * Mendapatkan semua setting perusahaan
      */
     public function getSettings()
     {
         $authCheck = $this->checkAuth();
-        if ($authCheck !== true) return $authCheck;
+        if ($authCheck !== true)
+            return $authCheck;
 
         try {
             $settings = $this->companySettingsModel->getAllSettings();
@@ -59,13 +68,15 @@ class CompanyApi extends ResourceController
             return $this->failServerError('Failed to get settings: ' . $e->getMessage());
         }
     }
+
     /**
-     * Update company setting
+     * Update satu setting perusahaan
      */
     public function updateSetting()
     {
         $authCheck = $this->checkAuth();
-        if ($authCheck !== true) return $authCheck;
+        if ($authCheck !== true)
+            return $authCheck;
 
         try {
             $json = $this->request->getJSON(true);
@@ -93,13 +104,15 @@ class CompanyApi extends ResourceController
             return $this->failServerError('Failed to update setting: ' . $e->getMessage());
         }
     }
+
     /**
-     * Get all services
+     * Mendapatkan seluruh data layanan (services)
      */
     public function getServices()
     {
         $authCheck = $this->checkAuth();
-        if ($authCheck !== true) return $authCheck;
+        if ($authCheck !== true)
+            return $authCheck;
 
         try {
             $services = $this->serviceModel->findAll();
@@ -113,17 +126,20 @@ class CompanyApi extends ResourceController
         }
     }
     /**
-     * Create new service
-     */    public function createService()
+     * Membuat layanan baru
+     */
+    public function createService()
     {
         $authCheck = $this->checkAuth();
-        if ($authCheck !== true) return $authCheck;
+        if ($authCheck !== true)
+            return $authCheck;
 
         try {
             $json = $this->request->getJSON(true);
 
             log_message('debug', 'CreateService: Received JSON data: ' . json_encode($json));
 
+            // Validasi input
             $validation = \Config\Services::validation();
             $validation->setRules([
                 'title' => 'required|max_length[100]',
@@ -164,12 +180,15 @@ class CompanyApi extends ResourceController
             return $this->failServerError('Failed to create service: ' . $e->getMessage());
         }
     }
+
     /**
-     * Update service
-     */    public function updateService($id)
+     * Mengupdate data layanan berdasarkan ID
+     */
+    public function updateService($id)
     {
         $authCheck = $this->checkAuth();
-        if ($authCheck !== true) return $authCheck;
+        if ($authCheck !== true)
+            return $authCheck;
 
         try {
             $service = $this->serviceModel->find($id);
@@ -179,6 +198,7 @@ class CompanyApi extends ResourceController
 
             $json = $this->request->getJSON(true);
 
+            // Validasi data yang masuk
             $validation = \Config\Services::validation();
             $validation->setRules([
                 'title' => 'required|max_length[100]',
@@ -190,6 +210,7 @@ class CompanyApi extends ResourceController
                 return $this->failValidationErrors($validation->getErrors());
             }
 
+            // Data yang akan diupdate
             $data = [
                 'title' => $json['title'],
                 'description' => $json['description'],
@@ -214,12 +235,13 @@ class CompanyApi extends ResourceController
     }
 
     /**
-     * Delete service
+     * Menghapus layanan berdasarkan ID
      */
     public function deleteService($id)
     {
         $authCheck = $this->checkAuth();
-        if ($authCheck !== true) return $authCheck;
+        if ($authCheck !== true)
+            return $authCheck;
 
         try {
             $service = $this->serviceModel->find($id);
@@ -241,18 +263,21 @@ class CompanyApi extends ResourceController
             return $this->failServerError('Failed to delete service: ' . $e->getMessage());
         }
     }
+
     /**
-     * Bulk update settings
+     * Melakukan bulk update terhadap beberapa settings sekaligus
      */
     public function bulkUpdateSettings()
     {
         $authCheck = $this->checkAuth();
-        if ($authCheck !== true) return $authCheck;
+        if ($authCheck !== true)
+            return $authCheck;
 
         try {
             $json = $this->request->getJSON(true);
             log_message('info', 'Bulk update settings request: ' . json_encode($json));
 
+            // Validasi array settings
             if (!isset($json['settings']) || !is_array($json['settings'])) {
                 return $this->failValidationErrors('Settings array is required');
             }
@@ -260,13 +285,13 @@ class CompanyApi extends ResourceController
             $updated = 0;
             $errors = [];
 
+            // Loop setiap setting untuk diupdate
             foreach ($json['settings'] as $setting) {
                 if (!isset($setting['key'])) {
                     $errors[] = 'Missing key for setting';
                     continue;
                 }
 
-                // Allow empty values for deletion
                 $value = isset($setting['value']) ? $setting['value'] : '';
 
                 log_message('info', "Updating setting: {$setting['key']} = '{$value}'");

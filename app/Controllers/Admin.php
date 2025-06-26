@@ -4,12 +4,15 @@ namespace App\Controllers;
 
 class Admin extends BaseController
 {
+
+    // Deklarasi properti model yang akan digunakan
     protected $contactModel;
     protected $adminUserModel;
     protected $companySettingsModel;
     protected $serviceModel;
     protected $partnerModel;
 
+    // Konstruktor: menginisialisasi semua model yang dibutuhkan
     public function __construct()
     {
         $this->contactModel = new \App\Models\ContactModel();
@@ -19,13 +22,15 @@ class Admin extends BaseController
         $this->partnerModel = new \App\Models\PartnerModel();
     }
 
+    // Dashboard admin
     public function index()
     {
-        // Authentication check
+        // Jika belum login, redirect ke login
         if (!session()->get('admin_logged_in')) {
             return redirect()->to('/admin/login');
         }
 
+        // Data yang dikirim ke view dashboard
         $data = [
             'title' => 'Admin Dashboard - PT. Samsudi Indoniaga Sedaya',
             'contacts' => $this->contactModel->getContacts(20),
@@ -36,8 +41,10 @@ class Admin extends BaseController
         return view('admin/dashboard', $data);
     }
 
+    // Halaman login admin
     public function login()
     {
+        // Jika sudah login, redirect ke dashboard
         if (session()->get('admin_logged_in')) {
             return redirect()->to('/admin');
         }
@@ -49,11 +56,13 @@ class Admin extends BaseController
         return view('admin/login', $data);
     }
 
+    // Proses autentikasi login
     public function authenticate()
     {
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
+        // Validasi input
         $validation = \Config\Services::validation();
         $validation->setRules([
             'email' => 'required|valid_email',
@@ -64,9 +73,11 @@ class Admin extends BaseController
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
+        // Cek kredensial user
         $user = $this->adminUserModel->verifyCredentials($email, $password);
 
         if ($user) {
+            // Set session jika berhasil login
             session()->set([
                 'admin_logged_in' => true,
                 'admin_user' => [
@@ -80,15 +91,18 @@ class Admin extends BaseController
             return redirect()->to('/admin')->with('success', 'Login berhasil!');
         }
 
+        // Jika gagal login
         return redirect()->back()->withInput()->with('error', 'Email atau password salah!');
     }
 
+    // Logout
     public function logout()
     {
         session()->destroy();
         return redirect()->to('/admin/login')->with('success', 'Anda telah logout!');
     }
 
+    // Tandai satu pesan sebagai "read"
     public function markAsRead($id)
     {
         if (!session()->get('admin_logged_in')) {
@@ -99,6 +113,7 @@ class Admin extends BaseController
         return redirect()->back()->with('success', 'Pesan ditandai sebagai dibaca!');
     }
 
+    // Hapus satu pesan
     public function deleteContact($id)
     {
         if (!session()->get('admin_logged_in')) {
@@ -109,7 +124,7 @@ class Admin extends BaseController
         return redirect()->back()->with('success', 'Pesan berhasil dihapus!');
     }
 
-    // Company Settings Management
+    // Tampilkan halaman pengaturan perusahaan
     public function settings()
     {
         if (!session()->get('admin_logged_in')) {
@@ -125,7 +140,7 @@ class Admin extends BaseController
         return view('admin/settings', $data);
     }
 
-    // Services Management
+    // Tampilkan halaman manajemen layanan
     public function services()
     {
         if (!session()->get('admin_logged_in')) {
@@ -141,7 +156,7 @@ class Admin extends BaseController
         return view('admin/services', $data);
     }
 
-    // Partners Management
+    // Tampilkan halaman manajemen mitra
     public function partners()
     {
         if (!session()->get('admin_logged_in')) {
@@ -157,7 +172,7 @@ class Admin extends BaseController
         return view('admin/partners', $data);
     }
 
-    // Initialize default data
+    // Inisialisasi data default (admin, settings, layanan)
     public function initializeData()
     {
         if (!session()->get('admin_logged_in')) {
@@ -180,6 +195,7 @@ class Admin extends BaseController
         }
     }
 
+    // Tampilkan daftar pesan kontak
     public function contacts()
     {
         // Authentication check
@@ -197,6 +213,7 @@ class Admin extends BaseController
         return view('admin/contacts', $data);
     }
 
+    // Tandai semua pesan sebagai "dibaca"
     public function markAllAsRead()
     {
         if (!session()->get('admin_logged_in')) {
@@ -211,6 +228,7 @@ class Admin extends BaseController
         }
     }
 
+    // Hapus semua pesan yang sudah dibaca
     public function deleteAllRead()
     {
         if (!session()->get('admin_logged_in')) {
@@ -225,6 +243,7 @@ class Admin extends BaseController
         }
     }
 
+    // Tampilkan form untuk ganti password admin
     public function changePassword()
     {
         if (!session()->get('admin_logged_in')) {
@@ -237,6 +256,7 @@ class Admin extends BaseController
         return view('admin/change_password', $data);
     }
 
+    // Update password admin
     public function updatePassword()
     {
         if (!session()->get('admin_logged_in')) {
@@ -256,10 +276,12 @@ class Admin extends BaseController
         if (!$validation->withRequest($this->request)->run()) {
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
+        // Verifikasi password lama
         $user = $this->adminUserModel->find($userId);
         if (!$user || !password_verify($oldPassword, $user['password'])) {
             return redirect()->back()->with('error', 'Password lama salah!');
         }
+        // Simpan password baru
         $this->adminUserModel->update($userId, [
             'password' => password_hash($newPassword, PASSWORD_DEFAULT)
         ]);

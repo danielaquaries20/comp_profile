@@ -8,7 +8,7 @@ class ImageUpload extends BaseController
 {
     public function upload()
     {
-        // Check if user is admin
+        // Check user jika dia adalah admin
         if (!session()->get('admin_logged_in')) {
             return $this->failUnauthorized('Access denied');
         }
@@ -36,11 +36,11 @@ class ImageUpload extends BaseController
         $img = $this->request->getFile('image');
 
         if ($img->isValid() && !$img->hasMoved()) {
-            // Generate unique filename
+            // Generate nama file yang unik
             $newName = $img->getRandomName();
 
             try {
-                // Move file to uploads directory
+                // Memindahkan file ke uploads directory
                 $img->move(ROOTPATH . 'public/assets/images/uploads', $newName);
 
                 // Return success response
@@ -68,12 +68,12 @@ class ImageUpload extends BaseController
     }
     public function delete()
     {
-        // Check if user is admin
+        // Check user jika dia adalah admin
         if (!session()->get('admin_logged_in')) {
             return $this->failUnauthorized('Access denied');
         }
 
-        // Try to get filename from JSON input first, then POST
+        // Ambil filename dari JSON input first, setelah itu POST
         $json = $this->request->getJSON(true);
         $filename = $json['filename'] ?? $this->request->getPost('filename');
 
@@ -111,7 +111,7 @@ class ImageUpload extends BaseController
         }
 
         return $this->response->setJSON([
-            'status' => 'success', // Return success even if file doesn't exist
+            'status' => 'success', // Return success meskipun filenya sudah tidak ada / dihapus
             'message' => 'File not found (already deleted)',
             'filename' => $filename
         ]);

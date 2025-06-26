@@ -9,16 +9,18 @@ class PartnerApi extends BaseController
 {
     protected $partnerModel;
 
+    // Inisialisasi model dilakukan di constructor.
     public function __construct()
     {
         $this->partnerModel = new \App\Models\PartnerModel();
     }
+
     /**
-     * Get all partners
+     * Ambil Semua Partner
      */
     public function index()
     {
-        // Check auth for admin only
+        // Check auth hanya untuk admin
         if (!session()->get('admin_logged_in')) {
             return $this->response->setStatusCode(401)->setJSON([
                 'status' => 'error',
@@ -40,11 +42,11 @@ class PartnerApi extends BaseController
         }
     }
     /**
-     * Get partner by ID
+     * Ambil Detail Partner
      */
     public function show($id)
     {
-        // Check auth for admin only
+        // Check auth hanya untuk admin
         if (!session()->get('admin_logged_in')) {
             return $this->response->setStatusCode(401)->setJSON([
                 'status' => 'error',
@@ -73,11 +75,11 @@ class PartnerApi extends BaseController
         }
     }
     /**
-     * Create new partner
+     * Tambah Partner Baru
      */
     public function create()
     {
-        // Check auth for admin only
+        // Check auth hanya untuk admin
         if (!session()->get('admin_logged_in')) {
             return $this->response->setStatusCode(401)->setJSON([
                 'status' => 'error',
@@ -106,7 +108,7 @@ class PartnerApi extends BaseController
                 ]);
             }
 
-            // Set default sort order if not provided
+            // Set default sort order
             if (!isset($data['sort_order'])) {
                 $data['sort_order'] = $this->partnerModel->getNextSortOrder();
             }
@@ -127,11 +129,11 @@ class PartnerApi extends BaseController
         }
     }
     /**
-     * Update partner
+     * Memperbarui Partner
      */
     public function update($id)
     {
-        // Check auth for admin only
+        // Check auth hanya admin saja
         if (!session()->get('admin_logged_in')) {
             return $this->response->setStatusCode(401)->setJSON([
                 'status' => 'error',
@@ -142,7 +144,7 @@ class PartnerApi extends BaseController
         try {
             $data = $this->request->getJSON(true);
 
-            // Check if partner exists
+            // Cek apakah partner ada
             $partner = $this->partnerModel->find($id);
             if (!$partner) {
                 return $this->response->setStatusCode(404)->setJSON([
@@ -151,7 +153,7 @@ class PartnerApi extends BaseController
                 ]);
             }
 
-            // Validation
+            // Validasi input
             $validation = \Config\Services::validation();
             $validation->setRules([
                 'name' => 'required|max_length[100]',
@@ -185,11 +187,11 @@ class PartnerApi extends BaseController
         }
     }
     /**
-     * Delete partner
+     * Hapus Partner
      */
     public function delete($id)
     {
-        // Check auth for admin only
+        // Check auth hanya admin
         if (!session()->get('admin_logged_in')) {
             return $this->response->setStatusCode(401)->setJSON([
                 'status' => 'error',
@@ -206,7 +208,7 @@ class PartnerApi extends BaseController
                 ]);
             }
 
-            // Delete logo file if exists
+            // Delete logo file jika ada
             if (!empty($partner['logo'])) {
                 $logoPath = FCPATH . 'assets/images/uploads/' . $partner['logo'];
                 if (file_exists($logoPath)) {
@@ -229,7 +231,7 @@ class PartnerApi extends BaseController
     }
 
     /**
-     * Toggle partner status
+     * Aktif/Nonaktif Partner
      */
     public function toggleStatus($id)
     {
