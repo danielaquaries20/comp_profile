@@ -1,5 +1,7 @@
+<!-- Menggunakan layout utama admin/layout.php sebagai kerangka halaman ini. -->
 <?= $this->extend('admin/layout') ?>
 
+<!-- Membuka section content agar isi halaman ini dimasukkan ke bagian layout utama. -->
 <?= $this->section('content') ?>
 
 <div class="content-header">
@@ -7,6 +9,7 @@
     <p>Kelola informasi perusahaan dan konten website</p>
 </div>
 
+<!-- Untuk menampilkan pesan sukses/gagal dari session flash setelah melakukan aksi (misal: tambah/edit/hapus partner). -->
 <?php if (session()->getFlashdata('success')): ?>
     <div class="alert alert-success">
         <?= session()->getFlashdata('success') ?>
@@ -19,6 +22,7 @@
     </div>
 <?php endif; ?>
 
+<!-- Form Setting untuk Company -->
 <div class="settings-container">
     <form id="settingsForm">
         <?= csrf_field() ?>
@@ -173,12 +177,12 @@
                 <span class="btn-loading" style="display: none;">Menyimpan...</span>
             </button>
             <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
-            <button type="button" class="btn btn-warning" onclick="testImageDeletion()" style="margin-left: 10px;">Test Delete</button>
+            <!-- <button type="button" class="btn btn-warning" onclick="testImageDeletion()" style="margin-left: 10px;">Test Delete</button> -->
         </div>
     </form>
 </div>
 
-<!-- Confirmation Modal -->
+<!-- Modal konfirmasi sebelum menghapus gambar tertentu dari pengaturan. -->
 <div id="confirmModal" class="modal confirm-modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-body">
@@ -199,6 +203,7 @@
 
 <?= $this->endSection() ?>
 
+<!-- Bagian untuk CSS internal -->
 <?= $this->section('css') ?>
 <style>
     /* Modal Styles */
@@ -316,6 +321,7 @@
 
 <?= $this->endSection() ?>
 
+<!-- Javascript Program -->
 <?= $this->section('js') ?>
 <script>
     document.getElementById('settingsForm').addEventListener('submit', async function(e) {

@@ -4,7 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Judul tab browser yang menandakan halaman login admin. -->
     <title>Login Admin - PT. Samsudi Indoniaga Sedaya</title>
+
+    <!-- CSS internal yang mengatur tampilan halaman login. -->
     <style>
         * {
             margin: 0;
@@ -121,18 +125,23 @@
         <div class="login-header">
             <h1>Admin Login</h1>
             <p>PT. Samsudi Indoniaga Sedaya</p>
-        </div> <?php if (session()->getFlashdata('success')): ?>
+        </div>
+
+        <!-- Menampilkan pesan sukses (misalnya setelah logout berhasil atau reset password). -->
+        <?php if (session()->getFlashdata('success')): ?>
             <div class="alert alert-success">
                 <?= session()->getFlashdata('success') ?>
             </div>
         <?php endif; ?>
 
+        <!-- Menampilkan pesan error umum (misalnya email atau password salah). -->
         <?php if (session()->getFlashdata('error')): ?>
             <div class="alert alert-danger">
                 <?= session()->getFlashdata('error') ?>
             </div>
         <?php endif; ?>
 
+        <!-- Menampilkan daftar error validasi (misalnya form kosong). -->
         <?php if (session()->getFlashdata('errors')): ?>
             <div class="alert alert-danger">
                 <ul style="margin: 0; padding-left: 20px;">
@@ -143,7 +152,9 @@
             </div>
         <?php endif; ?>
 
+        <!-- Mengirim data login ke route admin/authenticate menggunakan metode POST. -->
         <form action="<?= base_url('admin/authenticate') ?>" method="post">
+            <!-- Menambahkan CSRF token untuk mencegah serangan Cross-Site Request Forgery. -->
             <?= csrf_field() ?>
             <div class="form-group">
                 <label for="email">Email</label>
@@ -156,11 +167,14 @@
             <button type="submit" class="login-btn">Login</button>
         </form>
 
+        <!-- Memberikan tautan kembali ke halaman utama website (public). -->
         <div class="back-link">
             <a href="<?= base_url() ?>">← Kembali ke Website</a>
         </div>
 
-        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 14px; color: #666;">
+        <!-- Disediakan untuk testing/demo. Ini sebaiknya dihapus di versi production agar tidak membocorkan informasi login. -->
+        <div
+            style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 14px; color: #666;">
             <strong>Demo Credentials:</strong><br>
             Email: admin@company.com<br>
             Password: admin123

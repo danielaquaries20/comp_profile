@@ -1,5 +1,7 @@
+<!-- Menggunakan layout utama admin/layout.php sebagai kerangka halaman ini. -->
 <?= $this->extend('admin/layout') ?>
 
+<!-- Membuka section content agar isi halaman ini dimasukkan ke bagian layout utama. -->
 <?= $this->section('content') ?>
 
 <div class="content-header">
@@ -13,6 +15,7 @@
     </div>
 <?php endif; ?>
 
+<!-- Bagian statistik untuk jumlah pesan masuk -->
 <div class="stats">
     <div class="stat-card">
         <div class="stat-number"><?= count($contacts) ?></div>
@@ -28,6 +31,7 @@
     </div>
 </div>
 
+<!-- Tabel yang menampilkan daftar pesan terbaru -->
 <div class="card">
     <div class="card-header">
         <h3>Pesan Kontak Terbaru</h3>
@@ -87,6 +91,7 @@
 
 <?= $this->endSection() ?>
 
+<!-- Bagian untuk CSS internal -->
 <?= $this->section('css') ?>
 <style>
     .stats {

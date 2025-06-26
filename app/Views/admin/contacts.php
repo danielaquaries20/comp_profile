@@ -1,5 +1,7 @@
+<!-- Menggunakan layout utama admin/layout.php sebagai kerangka halaman ini. -->
 <?= $this->extend('admin/layout') ?>
 
+<!-- Membuka section content agar isi halaman ini dimasukkan ke bagian layout utama. -->
 <?= $this->section('content') ?>
 
 <div class="content-header">
@@ -7,18 +9,21 @@
     <p>Kelola pesan masuk dari website</p>
 </div>
 
+<!-- Menampilkan pesan flash success -->
 <?php if (session()->getFlashdata('success')): ?>
     <div class="alert alert-success">
         <?= session()->getFlashdata('success') ?>
     </div>
 <?php endif; ?>
 
+<!-- Menampilkan pesan flash error -->
 <?php if (session()->getFlashdata('error')): ?>
     <div class="alert alert-danger">
         <?= session()->getFlashdata('error') ?>
     </div>
 <?php endif; ?>
 
+<!-- Statistik total pesan, belum dibaca, dan sudah dibaca -->
 <div class="stats">
     <div class="stat-card">
         <div class="stat-number"><?= count($contacts) ?></div>
@@ -34,6 +39,7 @@
     </div>
 </div>
 
+<!-- Tabel daftar pesan -->
 <div class="card">
     <div class="card-header">
         <h3>Semua Pesan Kontak</h3>
@@ -62,6 +68,7 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- Jika tidak ada data pesan -->
                 <?php if (empty($contacts)): ?>
                     <tr>
                         <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
@@ -71,6 +78,7 @@
                         </td>
                     </tr>
                 <?php else: ?>
+                    <!-- Menampilkan setiap pesan dalam baris tabel -->
                     <?php foreach ($contacts as $contact): ?>
                         <tr class="<?= $contact['status'] === 'unread' ? 'unread-row' : '' ?>">
                             <td><?= date('d/m/Y H:i', strtotime($contact['created_at'])) ?></td>
@@ -142,7 +150,7 @@
     </div>
 </div>
 
-<!-- Message Detail Modal -->
+<!-- Modal untuk menampilkan detail pesan -->
 <div id="messageModal" class="modal" style="display: none;">
     <div class="modal-content modal-lg">
         <div class="modal-header">
@@ -161,7 +169,7 @@
     </div>
 </div>
 
-<!-- Reply Modal -->
+<!-- Modal untuk membalas pesan -->
 <div id="replyModal" class="modal" style="display: none;">
     <div class="modal-content modal-lg">
         <div class="modal-header">
@@ -196,6 +204,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('css') ?>
+<!-- CSS Internal -->
 <style>
     .stats {
         display: grid;
@@ -388,6 +397,7 @@
 </style>
 <?= $this->endSection() ?>
 
+<!-- Javascript Program -->
 <?= $this->section('js') ?>
 <script>
     // function showFullMessage(contactId) {

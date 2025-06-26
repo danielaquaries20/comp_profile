@@ -1,5 +1,7 @@
+<!-- Menggunakan layout utama admin/layout.php sebagai kerangka halaman ini. -->
 <?= $this->extend('admin/layout') ?>
 
+<!-- Membuka section content agar isi halaman ini dimasukkan ke bagian layout utama. -->
 <?= $this->section('content') ?>
 
 <div class="content-header">
@@ -7,6 +9,7 @@
     <p>Kelola layanan yang ditampilkan di website</p>
 </div>
 
+<!-- Untuk menampilkan pesan sukses/gagal dari session flash setelah melakukan aksi (misal: tambah/edit/hapus partner). -->
 <?php if (session()->getFlashdata('success')): ?>
     <div class="alert alert-success">
         <?= session()->getFlashdata('success') ?>
@@ -19,6 +22,7 @@
     </div>
 <?php endif; ?>
 
+<!-- Menampilkan daftar service dari variabel $services". -->
 <div class="card">
     <div class="card-header">
         <h3>Daftar Layanan</h3>
@@ -75,7 +79,7 @@
     </div>
 </div>
 
-<!-- Service Modal -->
+<!-- Modal ini digunakan baik untuk tambah maupun edit service, tergantung konteks saat dibuka. -->
 <div id="serviceModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
@@ -260,6 +264,7 @@
 
 <?= $this->endSection() ?>
 
+<!-- Bagian untuk CSS internal -->
 <?= $this->section('css') ?>
 <style>
     .description-preview {
@@ -538,6 +543,7 @@
 </style>
 <?= $this->endSection() ?>
 
+<!-- Javascript Program -->
 <?= $this->section('js') ?>
 <script>
     console.log('Services JavaScript loaded');

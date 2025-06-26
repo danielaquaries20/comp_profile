@@ -4,8 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Menampilkan judul halaman berdasarkan variabel $title, atau fallback ke 'Admin Panel' jika tidak diset. -->
     <title><?= isset($title) ? esc($title) : 'Admin Panel' ?></title>
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- CSS Internal -->
     <style>
         * {
             margin: 0;
@@ -473,7 +478,7 @@
         }
     </style>
 
-    <!-- Additional CSS -->
+    <!-- Placeholder untuk menyisipkan CSS tambahan dari file yang me-extend layout ini. -->
     <?= $this->renderSection('css') ?>
 </head>
 
@@ -547,7 +552,7 @@
                 </div>
             </header>
 
-            <!-- Content Area -->
+            <!-- Tempat konten halaman ditampilkan. Isi dari section content akan disisipkan di sini dari view yang me-extend layout ini. -->
             <div class="content-area">
                 <?= $this->renderSection('content') ?>
             </div>
@@ -556,7 +561,7 @@
 
     <!-- JavaScript -->
     <script>
-        // Auto-hide alerts after 5 seconds
+        // Skrip untuk menghilangkan alert (.alert) otomatis setelah 5 detik.
         document.addEventListener('DOMContentLoaded', function() {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {
@@ -569,7 +574,7 @@
                 }, 5000);
             });
         });
-    </script> <!-- Additional JS -->
+    </script> <!-- Section tambahan agar file lain bisa menyisipkan JavaScript khusus. -->
     <?= $this->renderSection('js') ?>
     <?= $this->renderSection('scripts') ?>
 </body>

@@ -1,5 +1,7 @@
+<!-- Menggunakan layout utama admin/layout.php sebagai kerangka halaman ini. -->
 <?= $this->extend('admin/layout') ?>
 
+<!-- Bagian untuk CSS internal -->
 <?= $this->section('css') ?>
 <style>
     /* Modal Styles */
@@ -256,6 +258,7 @@
 </style>
 <?= $this->endSection() ?>
 
+<!-- Membuka section content agar isi halaman ini dimasukkan ke bagian layout utama. -->
 <?= $this->section('content') ?>
 
 <div class="content-header">
@@ -263,6 +266,7 @@
     <p>Kelola mitra dan partner yang ditampilkan di website</p>
 </div>
 
+<!-- Untuk menampilkan pesan sukses/gagal dari session flash setelah melakukan aksi (misal: tambah/edit/hapus partner). -->
 <?php if (session()->getFlashdata('success')): ?>
     <div class="alert alert-success">
         <?= session()->getFlashdata('success') ?>
@@ -275,6 +279,7 @@
     </div>
 <?php endif; ?>
 
+<!-- Menampilkan daftar partner dari variabel $partners. Jika kosong, menampilkan pesan "Belum ada partner". -->
 <div class="card">
     <div class="card-header">
         <h3>Daftar Partner</h3>
@@ -353,7 +358,7 @@
     </div>
 </div>
 
-<!-- Partner Modal -->
+<!-- Modal ini digunakan baik untuk tambah maupun edit partner, tergantung konteks saat dibuka. -->
 <div id="partnerModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -413,7 +418,7 @@
     </div>
 </div>
 
-<!-- Confirmation Modal -->
+<!-- Modal popup yang muncul saat pengguna klik tombol hapus, untuk menghindari penghapusan yang tidak disengaja. -->
 <div id="confirmModal" class="modal confirm-modal">
     <div class="modal-content">
         <div class="modal-body">
@@ -434,6 +439,7 @@
 
 <?= $this->endSection() ?>
 
+<!-- Javascript Program -->
 <?= $this->section('js') ?>
 <script>
     // Wait for DOM to be ready
