@@ -1,8 +1,8 @@
 # Project UAS PWL - Company Profile Website - CodeIgniter 4
-Website Company Profile dengan nama Company PT. Samsudi Indoniaga Sedaya. Dibangun menggunakan CodeIgniter 4.
+Website Company Profile PT. Samsudi Indoniaga Sedaya. Dibangun menggunakan Framework CodeIgniter 4.
 
 Anggota Kelompok
-1. Aditya Eka Ramadhan – A11.2023.14497
+1. Aditia Eka Ramadhan – A11.2023.14997
 2. Daniel Aquaries Pratama - A11.2023.15003
 
 
