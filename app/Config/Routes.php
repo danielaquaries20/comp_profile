@@ -23,6 +23,9 @@ $routes->get('/kontak', 'CompanyProfile::contact');
 $routes->post('/contact/submit', 'CompanyProfile::submitContact');
 
 
+$routes->get('/genpass', 'Admin::genpass');
+$routes->get('/coba', 'Admin::coba');
+
 
 // Admin Routes
 $routes->group('admin', function ($routes) {

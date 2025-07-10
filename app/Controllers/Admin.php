@@ -22,6 +22,33 @@ class Admin extends BaseController
         $this->partnerModel = new \App\Models\PartnerModel();
     }
 
+
+    public function genpass()
+    {
+        echo password_hash('admin123', PASSWORD_DEFAULT);
+        // echo password_verify('ADMIN123456', '$2y$10$.ZB07oCmM6AOZ.lIaW46hOEt0S9V2RBKiiHyLsLWeLD6ZvHTZ9w9W');
+    }
+
+    public function coba()
+    {
+        $password = 'ADMIN123456';
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        echo "Hash generated: " . $hash . "\n";
+
+        $verify = password_verify($password, $hash);
+        echo "Verify result: ";
+        var_dump($verify);
+
+        // Simulate saving to database
+        $hash_db = $hash;
+
+        // Simulate reading from database
+        $verify_db = password_verify($password, $hash_db);
+        echo "Verify after simulated DB storage: ";
+        var_dump($verify_db);
+    }
+
+
     // Dashboard admin
     public function index()
     {
@@ -267,6 +294,8 @@ class Admin extends BaseController
         $newPassword = $this->request->getPost('new_password');
         $confirmPassword = $this->request->getPost('confirm_password');
 
+        log_message('debug', 'Update Password called with userId: ' . $userId);
+
         $validation = \Config\Services::validation();
         $validation->setRules([
             'old_password' => 'required',
@@ -281,10 +310,12 @@ class Admin extends BaseController
         if (!$user || !password_verify($oldPassword, $user['password'])) {
             return redirect()->back()->with('error', 'Password lama salah!');
         }
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         // Simpan password baru
         $this->adminUserModel->update($userId, [
-            'password' => password_hash($newPassword, PASSWORD_DEFAULT)
+            'password' => $hashedPassword
         ]);
+        log_message('debug', 'Hashed new password: ' . $hashedPassword);
         return redirect()->to('/admin/change-password')->with('success', 'Password berhasil diganti!');
     }
 }

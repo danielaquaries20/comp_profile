@@ -91,7 +91,10 @@ class AdminUserModel extends Model
     protected function hashPassword(array $data)
     {
         if (isset($data['data']['password'])) {
-            $data['data']['password'] = password_hash($data['data']['password'], PASSWORD_DEFAULT);
+            // Cek jika sudah terhash (hash bcrypt selalu diawali $2y$ atau $2a$ dan panjang 60 karakter)
+            if (!preg_match('/^\$2y\$/', $data['data']['password']) || strlen($data['data']['password']) != 60) {
+                $data['data']['password'] = password_hash($data['data']['password'], PASSWORD_DEFAULT);
+            }
         }
         return $data;
     }
